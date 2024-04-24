@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="recipe_width">200dp</dimen>
+    <dimen name="recipe_height">200dp</dimen>
+</resources>

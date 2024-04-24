@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "779518442985",
+    "project_id": "foodsearch-ed950",
+    "storage_bucket": "foodsearch-ed950.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779518442985:android:562280a310925826d89f78",
+        "android_client_info": {
+          "package_name": "com.example.foodsearch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYzHQxKMakP7td24voYLG7FbR5u0iPxBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

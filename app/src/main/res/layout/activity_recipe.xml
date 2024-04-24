@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        tools:text="Pizza" />
+
+    <ImageView
+        android:id="@+id/recipeImageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/titleTextView"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="16dp" />
+
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipeImageView"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        tools:text="Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+    <TextView
+        android:id="@+id/authorNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descriptionTextView"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        tools:text="Author: John Doe" />
+
+    <!-- Add rating stars -->
+    <ImageView
+        android:id="@+id/star1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/authorNameTextView"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/black_star"
+        android:clickable="true"
+        android:onClick="onStarClicked"/>
+
+    <ImageView
+        android:id="@+id/star2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/star1"
+        android:layout_below="@id/authorNameTextView"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/black_star"
+        android:clickable="true"
+        android:onClick="onStarClicked"/>
+
+    <ImageView
+        android:id="@+id/star3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/star2"
+        android:layout_below="@id/authorNameTextView"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/black_star"
+        android:clickable="true"
+        android:onClick="onStarClicked"/>
+
+    <ImageView
+        android:id="@+id/star4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/star3"
+        android:layout_below="@id/authorNameTextView"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/black_star"
+        android:clickable="true"
+        android:onClick="onStarClicked"/>
+
+    <ImageView
+        android:id="@+id/star5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/star4"
+        android:layout_below="@id/authorNameTextView"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/black_star"
+        android:clickable="true"
+        android:onClick="onStarClicked"/>
+
+</RelativeLayout>
