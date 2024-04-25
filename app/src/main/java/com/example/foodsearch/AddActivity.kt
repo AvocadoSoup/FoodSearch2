@@ -35,7 +35,6 @@ class AddActivity : AppCompatActivity() {
             val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
 
             if (recipeName.isNotEmpty() && description.isNotEmpty() && imageUrl.isNotEmpty() && authorName.isNotEmpty() && genre.isNotEmpty()) {
-                // Check if the current user's email matches the email associated with the recipe
                 if (currentUserEmail == null || currentUserEmail != authorName) {
                     showToast("You can only add recipes with your own email address")
                     return@setOnClickListener
