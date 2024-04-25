@@ -1,11 +1,11 @@
-// RecipeActivity.kt
 package com.example.foodsearch
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 
@@ -19,7 +19,7 @@ class RecipeActivity : AppCompatActivity() {
     private lateinit var star3: ImageView
     private lateinit var star4: ImageView
     private lateinit var star5: ImageView
-    private var rating: Int = 0
+    private lateinit var currentUserEmail: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,56 +43,59 @@ class RecipeActivity : AppCompatActivity() {
                     if (document != null && document.exists()) {
                         val recipe = document.toObject(Recipe::class.java)
                         if (recipe != null) {
-                            // Populate UI with recipe data
                             titleTextView.text = recipe.title
                             descriptionTextView.text = recipe.description
                             authorTextView.text = recipe.authorName
-                            // Load image using Picasso or Glide
                             Picasso.get().load(recipe.imageUrl).into(imageView)
-                            // Set initial rating
-                            rating = recipe.rating
-                            updateRating()
+                            currentUserEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
+                            checkCurrentUserEmail(recipe.uemail)
+                            setupRatingBar(recipeDocumentId)
                         }
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.e(TAG, "Error fetching recipe document", exception)
+                    showToast("Error fetching recipe data: ${exception.message}")
                 }
         } else {
-            Log.e(TAG, "Recipe document ID not provided")
-        }
-
-        // Set onClick listeners for stars
-        star1.setOnClickListener { onStarClicked(1) }
-        star2.setOnClickListener { onStarClicked(2) }
-        star3.setOnClickListener { onStarClicked(3) }
-        star4.setOnClickListener { onStarClicked(4) }
-        star5.setOnClickListener { onStarClicked(5) }
-    }
-
-    private fun onStarClicked(clickedRating: Int) {
-        rating = clickedRating
-        updateRating()
-
-        // Update rating in Firestore
-        val recipeDocumentId = intent.getStringExtra("recipeDocumentId")
-        if (recipeDocumentId != null) {
-            val recipeRef = FirebaseFirestore.getInstance().collection("recipes").document(recipeDocumentId)
-            recipeRef
-                .update("rating", rating)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Rating updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "Error updating rating", e)
-                }
-        } else {
-            Log.e(TAG, "Recipe document ID not provided")
+            showToast("Recipe document ID not provided")
         }
     }
 
+    private fun checkCurrentUserEmail(recipeAuthorEmail: String) {
+        if (currentUserEmail == recipeAuthorEmail) {
+            showToast("You cannot rate your own recipe")
+            star1.isEnabled = false
+            star2.isEnabled = false
+            star3.isEnabled = false
+            star4.isEnabled = false
+            star5.isEnabled = false
+        }
+    }
 
-    private fun updateRating() {
+    private fun setupRatingBar(recipeDocumentId: String) {
+        val starImageViews = arrayOf(star1, star2, star3, star4, star5)
+        for (i in 0 until starImageViews.size) {
+            starImageViews[i].setOnClickListener { onStarClicked(recipeDocumentId, i + 1) }
+        }
+    }
+
+    private fun onStarClicked(recipeDocumentId: String, clickedRating: Int) {
+        updateRating(recipeDocumentId, clickedRating)
+    }
+
+    private fun updateRating(recipeDocumentId: String, newRating: Int) {
+        FirebaseFirestore.getInstance().collection("recipes").document(recipeDocumentId)
+            .update("rating", newRating)
+            .addOnSuccessListener {
+                showToast("Rating updated successfully")
+                updateRatingUI(newRating)
+            }
+            .addOnFailureListener { e ->
+                showToast("Failed to update rating: ${e.message}")
+            }
+    }
+
+    private fun updateRatingUI(rating: Int) {
         val starResources = arrayOf(
             R.drawable.black_star,
             R.drawable.gold_star
@@ -100,14 +103,14 @@ class RecipeActivity : AppCompatActivity() {
         val starImageViews = arrayOf(star1, star2, star3, star4, star5)
 
         for (i in 0 until rating) {
-            starImageViews[i].setImageResource(starResources[1]) // Gold star
+            starImageViews[i].setImageResource(starResources[1])
         }
         for (i in rating until starImageViews.size) {
-            starImageViews[i].setImageResource(starResources[0]) // Black star
+            starImageViews[i].setImageResource(starResources[0])
         }
     }
 
-    companion object {
-        private const val TAG = "RecipeActivity"
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

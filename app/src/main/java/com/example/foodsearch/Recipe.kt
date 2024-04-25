@@ -6,6 +6,7 @@ data class Recipe(
     val description: String = "",
     val imageUrl: String = "",
     val authorName: String = "",
-    val rating: Int = 0, // Rating field
-    val genre: String = "" // Genre field
+    val rating: Int = 0,
+    val genre: String = "",
+    val uemail: String = ""
 )

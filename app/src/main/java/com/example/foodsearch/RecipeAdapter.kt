@@ -31,9 +31,8 @@ class RecipeAdapter(private val onItemClick: (String) -> Unit) : ListAdapter<Rec
             authorTextView.text = recipe.authorName
             Picasso.get().load(recipe.imageUrl).into(imageView)
 
-            // Set click listener on the item view
             itemView.setOnClickListener {
-                onItemClick(recipe.id) // Pass the recipe document ID to the lambda function
+                onItemClick(recipe.id)
             }
         }
     }

@@ -5,6 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AddActivity : AppCompatActivity() {
@@ -31,23 +32,42 @@ class AddActivity : AppCompatActivity() {
             val authorName = authorNameEditText.text.toString().trim()
             val genre = genreEditText.text.toString().trim()
 
+            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+
             if (recipeName.isNotEmpty() && description.isNotEmpty() && imageUrl.isNotEmpty() && authorName.isNotEmpty() && genre.isNotEmpty()) {
-                val recipe = mapOf(
+                // Check if the current user's email matches the email associated with the recipe
+                if (currentUserEmail == null || currentUserEmail != authorName) {
+                    showToast("You can only add recipes with your own email address")
+                    return@setOnClickListener
+                }
+
+                val recipe = hashMapOf(
+                    "id" to "",
                     "title" to recipeName,
                     "description" to description,
                     "imageUrl" to imageUrl,
                     "authorName" to authorName,
-                    "genre" to genre
+                    "rating" to 0,
+                    "genre" to genre,
+                    "uemail" to currentUserEmail
                 )
 
                 db.collection("recipes")
                     .add(recipe)
-                    .addOnSuccessListener {
-                        showToast("Recipe added successfully!")
-                        finish()
+                    .addOnSuccessListener { documentReference ->
+                        val recipeId = documentReference.id
+                        db.collection("recipes").document(recipeId)
+                            .update("id", recipeId)
+                            .addOnSuccessListener {
+                                showToast("Recipe added successfully!")
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                showToast("Failed to update recipe ID: ${e.message}")
+                            }
                     }
                     .addOnFailureListener { e ->
-                        showToast("Failed to add recipe. Error: ${e.message}")
+                        showToast("Failed to add recipe: ${e.message}")
                     }
             } else {
                 showToast("Please fill in all fields, including the genre")

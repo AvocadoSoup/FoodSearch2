@@ -27,7 +27,7 @@ class UserActivity : AppCompatActivity() {
         emailTextView = findViewById(R.id.emailTextView)
         passwordTextView = findViewById(R.id.passwordTextView)
         logoutButton = findViewById(R.id.logoutButton)
-        favouritesButton = findViewById(R.id.favouritesButton) // Add this line to initialize the favourites button
+        favouritesButton = findViewById(R.id.favouritesButton)
 
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser

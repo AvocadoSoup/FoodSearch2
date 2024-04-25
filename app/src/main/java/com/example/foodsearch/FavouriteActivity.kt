@@ -22,9 +22,7 @@ class FavouriteActivity : AppCompatActivity() {
 
         recyclerViewFavourite = findViewById(R.id.recyclerViewFavourite)
 
-        // Initialize RecyclerView and Adapter
         recipeAdapter = RecipeAdapter { recipeDocumentId ->
-            // Handle item click here
             val intent = Intent(this, RecipeActivity::class.java).apply {
                 putExtra("recipeDocumentId", recipeDocumentId)
             }
@@ -51,7 +49,7 @@ class FavouriteActivity : AppCompatActivity() {
                     val recipe = document.toObject(Recipe::class.java)
                     recipes.add(recipe)
                 }
-                recipeAdapter.submitList(recipes) // Submit the list through the adapter instance
+                recipeAdapter.submitList(recipes)
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Failed to fetch recipes: $exception", Toast.LENGTH_SHORT).show()
